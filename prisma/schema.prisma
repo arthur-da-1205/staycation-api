@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the User model
+model User {
+  id       Int       @id @default(autoincrement()) // Primary key with autoincrement
+  email    String    @unique // Unique constraint for email
+  name     String? // Optional name field
+  password String
+  role     String
+  // Define relation to Booking
+  bookings Booking[] // One-to-many relationship: One user can have multiple bookings
+}
+
+// Define the Accommodation model
+model Accommodation {
+  id          Int       @id @default(autoincrement()) // Primary key with autoincrement
+  name        String // Name of the accommodation
+  type        String // Type of accommodation (e.g., Hotel, Villa, Guest House)
+  description String // Description of the accommodation
+  location    String // Location of the accommodation
+  price       Float // Price of the accommodation per night
+  Booking     Booking[]
+}
+
+// Define the Booking model
+model Booking {
+  id               Int           @id @default(autoincrement()) // Primary key with autoincrement
+  accommodation_id Int // Foreign key to Accommodation
+  user_id          Int // Foreign key to User
+  status           BookingStatus // Status of the booking
+  // Define other fields related to booking
+  // Define relation to User
+  user             User          @relation(fields: [user_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one user
+  // Define relation to Accommodation
+  accommodation    Accommodation @relation(fields: [accommodation_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one accommodation
+  // Define relation to Transaction
+  transactions     Transaction[] // One-to-many relationship: One booking can have multiple transactions
+}
+
+// Define the Transaction model
+model Transaction {
+  id             Int      @id @default(autoincrement()) // Primary key with autoincrement
+  booking_id     Int // Foreign key to Booking
+  amount         Float // Amount of the transaction
+  currency       String // Currency of the transaction (e.g., USD, EUR)
+  timestamp      DateTime // Timestamp of the transaction
+  payment_method String // Payment method used for the transaction (e.g., credit card, PayPal)
+  status         String // Status of the transaction (e.g., pending, completed, failed)
+  Booking        Booking? @relation(fields: [bookingId], references: [id])
+  bookingId      Int?
+}
+
+// Define enum for booking status
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
