@@ -8,6 +8,7 @@ import { PrismaModule } from '@prisma/prisma.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma/prisma.service';
+import { CommonModule } from '@common/common.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PrismaService } from './prisma/prisma.service';
     PrismaModule,
     UsersModule,
     AdminModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

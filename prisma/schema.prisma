@@ -26,9 +26,9 @@ model User {
 
 // Define the Accommodation model
 model Accommodation {
-  id          Int       @id @default(autoincrement()) // Primary key with autoincrement
+  id          Int              @id @default(autoincrement()) // Primary key with autoincrement
   name        String // Name of the accommodation
-  type        String // Type of accommodation (e.g., Hotel, Villa, Guest House)
+  type        AccomodationType // Type of accommodation (e.g., Hotel, Villa, Guest House)
   description String // Description of the accommodation
   location    String // Location of the accommodation
   price       Float // Price of the accommodation per night
@@ -69,4 +69,10 @@ enum BookingStatus {
   CONFIRMED
   CANCELLED
   COMPLETED
+}
+
+enum AccomodationType {
+  VILLA
+  HOTEL
+  GUEST_HOUSE
 }

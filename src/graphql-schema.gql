@@ -2,9 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Accomodation {
+  description: String!
+  id: Int!
+  location: String!
+  name: String!
+  price: Int!
+  type: String!
+}
+
 type AdminAccessToken {
   access_token: String!
   user: User!
+}
+
+input AdminCreateAccomodationDto {
+  description: String!
+  location: String!
+  name: String!
+  price: Float!
+  type: String!
 }
 
 input AdminCreateDto {
@@ -20,10 +37,12 @@ input AdminLoginDto {
 
 type Mutation {
   adminLogin(args: AdminLoginDto!): AdminAccessToken!
+  createAccomodation(args: AdminCreateAccomodationDto!): Accomodation!
   createAdmin(args: AdminCreateDto!): AdminAccessToken!
 }
 
 type Query {
+  findAll: String!
   sayHello: String!
 }
 
