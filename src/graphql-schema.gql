@@ -2,6 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AccommodationModel {
+  description: String!
+  id: Float!
+  location: String!
+  name: String!
+  price: Float!
+  type: String!
+}
+
 type Accomodation {
   description: String!
   id: Int!
@@ -13,7 +22,7 @@ type Accomodation {
 
 type AdminAccessToken {
   access_token: String!
-  user: User!
+  user: UserModel!
 }
 
 input AdminCreateAccomodationDto {
@@ -37,16 +46,37 @@ input AdminLoginDto {
 
 type Mutation {
   adminLogin(args: AdminLoginDto!): AdminAccessToken!
+  adminUpdateAccommodation(description: String, id: Float!, location: String, name: String, price: Float, type: String): AccommodationModel!
   createAccomodation(args: AdminCreateAccomodationDto!): Accomodation!
   createAdmin(args: AdminCreateDto!): AdminAccessToken!
 }
 
+type PageInfo {
+  page: Int
+  page_count: Int
+  per_page: Int
+  total_count: Int
+}
+
+type PaginateAccommodationModel {
+  items: [AccommodationModel!]
+  meta: PageInfo
+}
+
 type Query {
-  findAll: String!
+  adminAccommodationDetail(id: Float!): AccommodationModel!
+  adminAccommodationList(
+    """VILLA,HOTEL,GUEST_HOUSE"""
+    name: String
+    page: Int = 1
+    per_page: Int = 10
+    search: String
+    sort: String
+  ): PaginateAccommodationModel!
   sayHello: String!
 }
 
-type User {
+type UserModel {
   email: String!
   id: Float!
   name: String!

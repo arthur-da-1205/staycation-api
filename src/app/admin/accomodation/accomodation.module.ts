@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AccomodationResolver } from './accomodation.resolver';
-import { AccomodationService } from './service/accomodation.service';
+import { AdminAccomodationResolver } from './accomodation.resolver';
+import { AdminAccomodationService } from './service/accomodation.service';
 
 @Module({
-  providers: [AccomodationResolver, AccomodationService],
+  providers: [AdminAccomodationResolver, AdminAccomodationService],
 })
 export class AdminAccomodationModule {}
