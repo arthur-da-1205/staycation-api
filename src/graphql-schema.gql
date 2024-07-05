@@ -2,9 +2,38 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AccommodationModel {
+  description: String!
+  id: Float!
+  location: String!
+  name: String!
+  price: Float!
+  status: String!
+  type: String!
+}
+
+type Accomodation {
+  description: String!
+  id: Int!
+  location: String!
+  name: String!
+  price: Int!
+  status: String!
+  type: String!
+}
+
 type AdminAccessToken {
   access_token: String!
-  user: User!
+  user: UserModel!
+}
+
+input AdminCreateAccomodationDto {
+  description: String!
+  location: String!
+  name: String!
+  price: Float!
+  status: String!
+  type: String!
 }
 
 input AdminCreateDto {
@@ -20,14 +49,41 @@ input AdminLoginDto {
 
 type Mutation {
   adminLogin(args: AdminLoginDto!): AdminAccessToken!
+  adminUpdateAccommodation(description: String, id: Float!, location: String, name: String, price: Float, status: String, type: String): AccommodationModel!
+  createAccomodation(args: AdminCreateAccomodationDto!): Accomodation!
   createAdmin(args: AdminCreateDto!): AdminAccessToken!
 }
 
+type PageInfo {
+  page: Int
+  page_count: Int
+  per_page: Int
+  total_count: Int
+}
+
+type PaginateAccommodationModel {
+  items: [AccommodationModel!]
+  meta: PageInfo
+}
+
 type Query {
+  adminAccommodationDetail(id: Float!): AccommodationModel!
+  adminAccommodationList(
+    page: Int = 1
+    per_page: Int = 10
+    search: String
+    sort: String
+
+    """ACTIVE,PERMANENT_CLOSED,TEMPORARY_CLOSED"""
+    status: String
+
+    """VILLA,HOTEL,GUEST_HOUSE"""
+    type: String
+  ): PaginateAccommodationModel!
   sayHello: String!
 }
 
-type User {
+type UserModel {
   email: String!
   id: Float!
   name: String!

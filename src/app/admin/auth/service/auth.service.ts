@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { GenericException } from '@common/exceptions/generic.exception';
 import { hash, hashAreEqual } from '@libraries/helpers/encrypt.helper';
-import { User } from '@models/user.model';
+import { UserModel } from '@models/user.model';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@prisma/prisma.service';
@@ -40,7 +40,7 @@ export class AdminAuthService {
     return { user };
   }
 
-  async validate(email: string, password: string): Promise<User> {
+  async validate(email: string, password: string): Promise<UserModel> {
     const user = await this.prismaService.user.findFirst({
       where: { email: email },
     });
@@ -52,7 +52,7 @@ export class AdminAuthService {
     return user;
   }
 
-  async createToken(user: User) {
+  async createToken(user: UserModel) {
     const payload = {
       id: user.id,
       email: user.email,
