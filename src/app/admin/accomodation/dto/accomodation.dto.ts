@@ -1,5 +1,5 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
-import { AccomodationType } from '@prisma/client';
+import { AccommodationStatus, AccomodationType } from '@prisma/client';
 import {
   IsEnum,
   IsNotEmpty,
@@ -19,6 +19,11 @@ export class AdminCreateAccomodationDto {
   @IsNotEmpty()
   @IsEnum(AccomodationType)
   type: AccomodationType;
+
+  @Field()
+  @IsNotEmpty()
+  @IsEnum(AccommodationStatus)
+  status: AccommodationStatus;
 
   @Field()
   @IsString()
@@ -43,7 +48,14 @@ export class AdminAccommodationArgs {
     description: Object.values(AccomodationType).toString(),
   })
   @IsOptional()
-  name?: string;
+  type?: string;
+
+  @Field({
+    nullable: true,
+    description: Object.values(AccommodationStatus).toString(),
+  })
+  @IsOptional()
+  status?: string;
 
   @Field({ nullable: true })
   @IsOptional()
@@ -65,6 +77,11 @@ export class UpdateAccommodationInput {
   @IsOptional()
   @IsEnum(AccomodationType)
   type?: AccomodationType;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsEnum(AccommodationStatus)
+  status?: AccommodationStatus;
 
   @Field({ nullable: true })
   @IsOptional()

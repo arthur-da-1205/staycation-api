@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { AccomodationType } from '@prisma/client';
+import { AccommodationStatus, AccomodationType } from '@prisma/client';
 import { IsOptional } from 'class-validator';
 import { Paginated } from './paginate.model';
 
@@ -13,6 +13,9 @@ export class AccommodationModel {
 
   @Field()
   type: AccomodationType;
+
+  @Field()
+  status: AccommodationStatus;
 
   @Field()
   @IsOptional()

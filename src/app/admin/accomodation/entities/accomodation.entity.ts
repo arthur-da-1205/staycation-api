@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Accomodation {
@@ -10,6 +10,9 @@ export class Accomodation {
 
   @Field(() => String)
   type: string;
+
+  @Field(() => String)
+  status: string;
 
   @Field(() => String)
   description: string;

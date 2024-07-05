@@ -13,6 +13,7 @@ export class AdminAccomodationService {
         price: dto.price,
         location: dto.location,
         type: dto.type,
+        status: dto.status,
       },
     });
 

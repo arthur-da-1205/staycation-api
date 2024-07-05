@@ -45,14 +45,16 @@ export class AdminAccomodationResolver {
       throw new GenericException('Max. Limit 100');
     }
 
-    const where = filter?.search
-      ? {
-          OR: [
-            { name: { contains: filter.search, mode: 'insensitive' } },
-            { location: { contains: filter.search, mode: 'insensitive' } },
-          ],
-        }
-      : {};
+    const where = {
+      ...(filter?.type && { type: filter.type }),
+      ...(filter?.status && { status: filter.status }),
+      ...(filter?.search && {
+        OR: [
+          { name: { contains: filter.search, mode: 'insensitive' } },
+          { location: { contains: filter.search, mode: 'insensitive' } },
+        ],
+      }),
+    };
 
     const [items, total_count] = await this.prismaService.$transaction([
       this.prismaService.accommodation.findMany({
