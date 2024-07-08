@@ -1,15 +1,15 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
-import { AccommodationStatus, AccomodationType } from '@prisma/client';
+import { AccommodationStatus, AccommodationType } from '@prisma/client';
 import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
+    IsEnum,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
 } from 'class-validator';
 
 @InputType()
-export class AdminCreateAccomodationDto {
+export class OwnerCreateAccomodationInput {
   @Field()
   @IsNotEmpty()
   @IsString()
@@ -17,8 +17,8 @@ export class AdminCreateAccomodationDto {
 
   @Field()
   @IsNotEmpty()
-  @IsEnum(AccomodationType)
-  type: AccomodationType;
+  @IsEnum(AccommodationType)
+  type: AccommodationType;
 
   @Field()
   @IsNotEmpty()
@@ -39,13 +39,18 @@ export class AdminCreateAccomodationDto {
   @IsNumber()
   @IsNotEmpty()
   price: number;
+
+  @Field()
+  @IsNumber()
+  @IsNotEmpty()
+  owner_id: number;
 }
 
 @ArgsType()
-export class AdminAccommodationArgs {
+export class OwnerAccommodationArgs {
   @Field({
     nullable: true,
-    description: Object.values(AccomodationType).toString(),
+    description: Object.values(AccommodationType).toString(),
   })
   @IsOptional()
   type?: string;
@@ -64,7 +69,7 @@ export class AdminAccommodationArgs {
 }
 
 @ArgsType()
-export class UpdateAccommodationInput {
+export class OwnerUpdateAccommodationInput {
   @Field()
   id: number;
 
@@ -75,8 +80,8 @@ export class UpdateAccommodationInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsEnum(AccomodationType)
-  type?: AccomodationType;
+  @IsEnum(AccommodationType)
+  type?: AccommodationType;
 
   @Field({ nullable: true })
   @IsOptional()

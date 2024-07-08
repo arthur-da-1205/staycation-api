@@ -1,6 +1,6 @@
 import { PaginationArgs } from '@common/args/paginate.args';
 import { GenericException } from '@common/exceptions/generic.exception';
-import { GqlAuthAdminGuard } from '@common/gurads/gql.guard';
+import { GqlAuthOwnerGuard } from '@common/gurads/gql.guard';
 import {
   AccommodationModel,
   PaginateAccommodationModel,
@@ -9,25 +9,25 @@ import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PrismaService } from '@prisma/prisma.service';
 import {
-  AdminAccommodationArgs,
-  AdminCreateAccomodationDto,
-  UpdateAccommodationInput,
+  OwnerAccommodationArgs,
+  OwnerCreateAccomodationInput,
+  OwnerUpdateAccommodationInput,
 } from './dto/accomodation.dto';
 import { Accomodation } from './entities/accomodation.entity';
-import { AdminAccomodationService } from './service/accomodation.service';
+import { OwnerAccomodationService } from './service/accomodation.service';
 
-@UseGuards(GqlAuthAdminGuard)
+@UseGuards(GqlAuthOwnerGuard)
 @Resolver()
-export class AdminAccomodationResolver {
+export class OwnerAccomodationResolver {
   constructor(
-    private readonly accomodationService: AdminAccomodationService,
+    private readonly accomodationService: OwnerAccomodationService,
     private prismaService: PrismaService,
   ) {}
 
   @Mutation(() => Accomodation)
-  async createAccomodation(
+  async ownerCreateAccomodation(
     @Args('args')
-    createAccomodationInput: AdminCreateAccomodationDto,
+    createAccomodationInput: OwnerCreateAccomodationInput,
   ) {
     const accomodation = await this.accomodationService.create(
       createAccomodationInput,
@@ -37,9 +37,9 @@ export class AdminAccomodationResolver {
   }
 
   @Query(() => PaginateAccommodationModel)
-  async adminAccommodationList(
+  async ownerAccommodationList(
     @Args() paginate: PaginationArgs,
-    @Args({ nullable: true }) filter: AdminAccommodationArgs,
+    @Args({ nullable: true }) filter: OwnerAccommodationArgs,
   ): Promise<PaginateAccommodationModel> {
     if (paginate.per_page > 100) {
       throw new GenericException('Max. Limit 100');
@@ -80,7 +80,7 @@ export class AdminAccomodationResolver {
   }
 
   @Query(() => AccommodationModel)
-  async adminAccommodationDetail(@Args('id') id: number) {
+  async ownerAccommodationDetail(@Args('id') id: number) {
     const accommodation = await this.prismaService.accommodation.findUnique({
       where: { id: id },
     });
@@ -89,9 +89,9 @@ export class AdminAccomodationResolver {
   }
 
   @Mutation(() => AccommodationModel)
-  async adminUpdateAccommodation(
+  async ownerUpdateAccommodation(
     @Args('id') id: number,
-    @Args({ nullable: true }) data: UpdateAccommodationInput,
+    @Args({ nullable: true }) data: OwnerUpdateAccommodationInput,
   ): Promise<AccommodationModel> {
     const accommodation = await this.prismaService.accommodation.findUnique({
       where: { id: id },

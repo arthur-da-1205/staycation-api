@@ -6,7 +6,7 @@ import { PrismaService } from '@prisma/prisma.service';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 
 @Injectable()
-export class JwtAdminStrategy extends PassportStrategy(Strategy, 'jwt-admin') {
+export class JwtOwnerStrategy extends PassportStrategy(Strategy, 'jwt-owner') {
   constructor(
     config: ConfigService,
     private prismaService: PrismaService,
@@ -20,7 +20,7 @@ export class JwtAdminStrategy extends PassportStrategy(Strategy, 'jwt-admin') {
 
   // exposing payload
   async validate(payload: any, done: VerifiedCallback) {
-    const user = await this.prismaService.user.findUnique({
+    const user = await this.prismaService.owner.findUnique({
       where: { id: payload.id },
     });
     if (!user) {

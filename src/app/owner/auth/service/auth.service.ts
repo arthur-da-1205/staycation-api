@@ -1,26 +1,26 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { GenericException } from '@common/exceptions/generic.exception';
+import { jwt } from '@config/jwt.config';
 import { hash, hashAreEqual } from '@libraries/helpers/encrypt.helper';
-import { UserModel } from '@models/user.model';
+import { OwnerModel } from '@models/owner.model';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@prisma/prisma.service';
-import { AdminCreateDto } from '../dto/admin.dto';
-import { jwt } from '@config/jwt.config';
+import { OwnerRegisterInput } from '../dto/admin.dto';
 
 @Injectable()
-export class AdminAuthService {
+export class OwnerAuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
     private readonly config: ConfigService,
   ) {}
 
-  async createAdmin(dto: AdminCreateDto) {
+  async createOwner(dto: OwnerRegisterInput) {
     const { email } = dto;
 
-    const existUser = await this.prismaService.user.findFirst({
+    const existUser = await this.prismaService.owner.findFirst({
       where: { email: email },
     });
 
@@ -28,20 +28,19 @@ export class AdminAuthService {
       throw new GenericException('User already exist');
     }
 
-    const user = await this.prismaService.user.create({
+    const user = await this.prismaService.owner.create({
       data: {
         email: dto.email,
         name: dto.name,
         password: await hash(dto.password),
-        role: 'ADMIN',
       },
     });
 
     return { user };
   }
 
-  async validate(email: string, password: string): Promise<UserModel> {
-    const user = await this.prismaService.user.findFirst({
+  async validate(email: string, password: string): Promise<OwnerModel> {
+    const user = await this.prismaService.owner.findFirst({
       where: { email: email },
     });
 
@@ -52,12 +51,11 @@ export class AdminAuthService {
     return user;
   }
 
-  async createToken(user: UserModel) {
+  async createToken(user: OwnerModel) {
     const payload = {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role,
     };
 
     return {

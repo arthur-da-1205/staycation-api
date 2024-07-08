@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
+    BadRequestException,
+    ConflictException,
+    Injectable,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from '../dto/user.dto';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class UsersService {
           name,
           email,
           password: hash,
-          role: 'USER',
+
         },
       });
 

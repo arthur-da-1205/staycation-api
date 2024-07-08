@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class UserModel {
+export class OwnerModel {
   @Field()
   id: number;
 
@@ -10,7 +10,4 @@ export class UserModel {
 
   @Field()
   name: string;
-
-  @Field()
-  role?: string;
 }

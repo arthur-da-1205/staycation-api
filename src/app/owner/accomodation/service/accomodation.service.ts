@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
-import { AdminCreateAccomodationDto } from '../dto/accomodation.dto';
+import { OwnerCreateAccomodationInput } from '../dto/accomodation.dto';
 
 @Injectable()
-export class AdminAccomodationService {
+export class OwnerAccomodationService {
   constructor(private prismaService: PrismaService) {}
-  async create(dto: AdminCreateAccomodationDto) {
+  async create(dto: OwnerCreateAccomodationInput) {
     const accomodation = await this.prismaService.accommodation.create({
       data: {
         name: dto.name,
@@ -14,6 +14,7 @@ export class AdminAccomodationService {
         location: dto.location,
         type: dto.type,
         status: dto.status,
+        owner_id: dto.owner_id,
       },
     });
 

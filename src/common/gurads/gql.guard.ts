@@ -1,7 +1,7 @@
-import { TokenException } from '../exceptions/token.exception';
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
+import { TokenException } from '../exceptions/token.exception';
 
 function getRequest(context: ExecutionContext) {
   const ctx = GqlExecutionContext.create(context);
@@ -40,7 +40,7 @@ export class GqlAuthSalesmanGuard extends AuthGuard('jwt-salesman') {
 }
 
 @Injectable()
-export class GqlAuthAdminGuard extends AuthGuard('jwt-admin') {
+export class GqlAuthOwnerGuard extends AuthGuard('jwt-owner') {
   getRequest = getRequest;
   handleRequest = handleRequest;
 }

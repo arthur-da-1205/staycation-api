@@ -1,13 +1,13 @@
+import { OwnerModel } from '@models/owner.model';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UsersService } from './service/users.service';
 import { CreateUserDto, CreateUserInput } from './dto/user.dto';
-import { UserModel } from '@models/user.model';
+import { UsersService } from './service/users.service';
 
-@Resolver((of) => UserModel)
+@Resolver((of) => OwnerModel)
 export class UserReslver {
   constructor(private readonly userService: UsersService) {}
 
-  @Mutation(() => UserModel)
+  @Mutation(() => OwnerModel)
   userSignUp(@Args('userSigninInput') userSignInInput: CreateUserDto) {
     return this.userService.createUser(userSignInInput);
   }

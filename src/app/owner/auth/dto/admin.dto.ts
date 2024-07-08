@@ -2,7 +2,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 @InputType()
-export class AdminCreateDto {
+export class OwnerRegisterInput {
   @Field()
   @IsString()
   @IsNotEmpty()
@@ -21,7 +21,7 @@ export class AdminCreateDto {
 }
 
 @InputType()
-export class AdminLoginDto {
+export class OwnerLoginInput {
   @Field()
   @IsEmail()
   @IsNotEmpty()

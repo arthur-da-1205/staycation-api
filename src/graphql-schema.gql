@@ -22,36 +22,43 @@ type Accomodation {
   type: String!
 }
 
-type AdminAccessToken {
-  access_token: String!
-  user: UserModel!
+type Mutation {
+  ownerCreateAccomodation(args: OwnerCreateAccomodationInput!): Accomodation!
+  ownerLogin(args: OwnerLoginInput!): OwnerAccessToken!
+  ownerRegister(args: OwnerRegisterInput!): OwnerAccessToken!
+  ownerUpdateAccommodation(description: String, id: Float!, location: String, name: String, price: Float, status: String, type: String): AccommodationModel!
 }
 
-input AdminCreateAccomodationDto {
+type OwnerAccessToken {
+  access_token: String!
+  user: OwnerModel!
+}
+
+input OwnerCreateAccomodationInput {
   description: String!
   location: String!
   name: String!
+  owner_id: Float!
   price: Float!
   status: String!
   type: String!
 }
 
-input AdminCreateDto {
+input OwnerLoginInput {
+  email: String!
+  password: String!
+}
+
+type OwnerModel {
+  email: String!
+  id: Float!
+  name: String!
+}
+
+input OwnerRegisterInput {
   email: String!
   name: String!
   password: String!
-}
-
-input AdminLoginDto {
-  email: String!
-  password: String!
-}
-
-type Mutation {
-  adminLogin(args: AdminLoginDto!): AdminAccessToken!
-  adminUpdateAccommodation(description: String, id: Float!, location: String, name: String, price: Float, status: String, type: String): AccommodationModel!
-  createAccomodation(args: AdminCreateAccomodationDto!): Accomodation!
-  createAdmin(args: AdminCreateDto!): AdminAccessToken!
 }
 
 type PageInfo {
@@ -67,8 +74,8 @@ type PaginateAccommodationModel {
 }
 
 type Query {
-  adminAccommodationDetail(id: Float!): AccommodationModel!
-  adminAccommodationList(
+  ownerAccommodationDetail(id: Float!): AccommodationModel!
+  ownerAccommodationList(
     page: Int = 1
     per_page: Int = 10
     search: String
@@ -81,11 +88,4 @@ type Query {
     type: String
   ): PaginateAccommodationModel!
   sayHello: String!
-}
-
-type UserModel {
-  email: String!
-  id: Float!
-  name: String!
-  role: String!
 }
