@@ -1,11 +1,11 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
 import { AccommodationStatus, AccommodationType } from '@prisma/client';
 import {
-    IsEnum,
-    IsNotEmpty,
-    IsNumber,
-    IsOptional,
-    IsString,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
 } from 'class-validator';
 
 @InputType()

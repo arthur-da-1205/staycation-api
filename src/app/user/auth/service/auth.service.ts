@@ -1,43 +1,40 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-
 import { GenericException } from '@common/exceptions/generic.exception';
 import { jwt } from '@config/jwt.config';
 import { hash, hashAreEqual } from '@libraries/helpers/encrypt.helper';
-import { OwnerModel } from '@models/owner.model';
-import { ConfigService } from '@nestjs/config';
+import { UserModel } from '@models/user.model';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@prisma/prisma.service';
-import { OwnerRegisterInput } from '../dto/owner.dto';
+import { UserRegisterInput } from '../dto/user.dto';
 
 @Injectable()
-export class OwnerAuthService {
+export class UserAuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-    private readonly config: ConfigService,
   ) {}
 
-  private async generateOwnerId(): Promise<number> {
-    const lastOwner = await this.prismaService.owner.findFirst({
+  private async generateUserId(): Promise<number> {
+    const lastUser = await this.prismaService.user.findFirst({
       orderBy: { id: 'desc' },
     });
 
-    if (lastOwner) {
-      let nextId = lastOwner.id + 1;
+    if (lastUser) {
+      let nextId = lastUser.id + 1;
       if (nextId % 10000 === 0) {
         nextId += 1;
       }
       return nextId;
     } else {
-      return 10001;
+      return 20001;
     }
   }
 
-  async createOwner(dto: OwnerRegisterInput) {
+  async createUser(dto: UserRegisterInput) {
     const { email } = dto;
-    const customId = await this.generateOwnerId();
+    const customId = await this.generateUserId();
 
-    const existUser = await this.prismaService.owner.findFirst({
+    const existUser = await this.prismaService.user.findFirst({
       where: { email: email },
     });
 
@@ -45,7 +42,7 @@ export class OwnerAuthService {
       throw new GenericException('User already exist');
     }
 
-    const user = await this.prismaService.owner.create({
+    const user = await this.prismaService.user.create({
       data: {
         id: customId,
         email: dto.email,
@@ -57,8 +54,8 @@ export class OwnerAuthService {
     return { user };
   }
 
-  async validate(email: string, password: string): Promise<OwnerModel> {
-    const user = await this.prismaService.owner.findFirst({
+  async validate(email: string, password: string): Promise<UserModel> {
+    const user = await this.prismaService.user.findFirst({
       where: { email: email },
     });
 
@@ -69,7 +66,7 @@ export class OwnerAuthService {
     return user;
   }
 
-  async createToken(user: OwnerModel) {
+  async createToken(user: UserModel) {
     const payload = {
       id: user.id,
       email: user.email,

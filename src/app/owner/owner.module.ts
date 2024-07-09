@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { OwnerAccomodationModule } from './accomodation/accomodation.module';
+import { OwnerAccomodationModule } from './accommodation/accommodation.module';
 import { OwnerAuthModule } from './auth/auth.module';
 
 @Module({

@@ -12,12 +12,12 @@ import {
   OwnerAccommodationArgs,
   OwnerCreateAccomodationInput,
   OwnerUpdateAccommodationInput,
-} from './dto/accomodation.dto';
-import { Accomodation } from './entities/accomodation.entity';
-import { OwnerAccomodationService } from './service/accomodation.service';
+} from './dto/accommodation.dto';
+import { Accomodation } from './entities/accommodation.entity';
+import { OwnerAccomodationService } from './service/accommodation.service';
 
-@UseGuards(GqlAuthOwnerGuard)
 @Resolver()
+@UseGuards(GqlAuthOwnerGuard)
 export class OwnerAccomodationResolver {
   constructor(
     private readonly accomodationService: OwnerAccomodationService,

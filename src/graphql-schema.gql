@@ -27,6 +27,8 @@ type Mutation {
   ownerLogin(args: OwnerLoginInput!): OwnerAccessToken!
   ownerRegister(args: OwnerRegisterInput!): OwnerAccessToken!
   ownerUpdateAccommodation(description: String, id: Float!, location: String, name: String, price: Float, status: String, type: String): AccommodationModel!
+  userLogin(args: UserLoginInput!): UserAccessToken!
+  userRegister(args: UserRegisterInput!): UserAccessToken!
 }
 
 type OwnerAccessToken {
@@ -88,4 +90,37 @@ type Query {
     type: String
   ): PaginateAccommodationModel!
   sayHello: String!
+  userAccommodationDetail(id: Float!): AccommodationModel!
+  userAccommodationList(
+    page: Int = 1
+    per_page: Int = 10
+    search: String
+    sort: String
+
+    """ACTIVE,PERMANENT_CLOSED,TEMPORARY_CLOSED"""
+    status: String
+    type: String
+  ): PaginateAccommodationModel!
+}
+
+type UserAccessToken {
+  access_token: String!
+  user: UserModel!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+type UserModel {
+  email: String!
+  id: Float!
+  name: String!
+}
+
+input UserRegisterInput {
+  email: String!
+  name: String!
+  password: String!
 }

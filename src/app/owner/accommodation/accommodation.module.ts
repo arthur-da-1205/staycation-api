@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { OwnerAccomodationResolver } from './accomodation.resolver';
-import { OwnerAccomodationService } from './service/accomodation.service';
+import { OwnerAccomodationResolver } from './accommodation.resolver';
+import { OwnerAccomodationService } from './service/accommodation.service';
 
 @Module({
   providers: [OwnerAccomodationResolver, OwnerAccomodationService],
