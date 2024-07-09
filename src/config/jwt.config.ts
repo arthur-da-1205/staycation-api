@@ -4,5 +4,5 @@ const config = new ConfigService();
 
 export const jwt = {
   secret: config.get('JWT_SECRET'),
-  expiresIn: '25m',
+  expiresIn: '1h',
 };

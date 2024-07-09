@@ -22,7 +22,7 @@ function handleRequest(err, user, info, context, status) {
 }
 
 @Injectable()
-export class GqlAuthGuard extends AuthGuard('jwt') {
+export class GqlAuthGuard extends AuthGuard('jwt-user') {
   getRequest = getRequest;
   handleRequest = handleRequest;
 }

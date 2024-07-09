@@ -12,7 +12,7 @@ datasource db {
 
 // Define the User model for clients
 model User {
-  id        Int       @id @default(autoincrement()) // Primary key with autoincrement
+  id        Int       @id // Primary key with autoincrement
   email     String    @unique // Unique constraint for email
   name      String? // Optional name field
   password  String
@@ -23,7 +23,7 @@ model User {
 
 // Define the Owner model for accommodation owners
 model Owner {
-  id             Int             @id @default(autoincrement()) // Primary key with autoincrement
+  id             Int             @id // Primary key with autoincrement
   email          String          @unique // Unique constraint for email
   name           String? // Optional name field
   password       String
