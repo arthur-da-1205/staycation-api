@@ -101,6 +101,7 @@ type Query {
     status: String
     type: String
   ): PaginateAccommodationModel!
+  userPersonalProfile: UserModel!
 }
 
 type UserAccessToken {
