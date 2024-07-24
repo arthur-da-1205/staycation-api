@@ -12,13 +12,14 @@ datasource db {
 
 // Define the User model for clients
 model User {
-  id        Int       @id // Primary key with autoincrement
-  email     String    @unique // Unique constraint for email
+  id        Int         @id // Primary key with autoincrement
+  email     String      @unique // Unique constraint for email
   name      String? // Optional name field
   password  String
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @default(now()) @updatedAt @map("updated_at")
   bookings  Booking[] // One-to-many relationship: One user can have multiple bookings
+  Favourite Favourite[]
 }
 
 // Define the Owner model for accommodation owners
@@ -46,6 +47,7 @@ model Accommodation {
   bookings    Booking[] // One-to-many relationship: One accommodation can have multiple bookings
   createdAt   DateTime            @default(now()) @map("created_at")
   updatedAt   DateTime            @default(now()) @updatedAt @map("updated_at")
+  Favourite   Favourite[]
 }
 
 // Define the Booking model
@@ -73,6 +75,18 @@ model Transaction {
   booking        Booking  @relation(fields: [booking_id], references: [id]) // Many-to-one relationship: Many transactions can be associated with one booking
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+}
+
+model Favourite {
+  id               Int           @id @default(autoincrement())
+  accommodation_id Int
+  user_id          Int
+  user             User          @relation(fields: [user_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one user
+  accommodation    Accommodation @relation(fields: [accommodation_id], references: [id])
+
+  @@unique([user_id, accommodation_id]) // Composite unique constraint
+  @@index([accommodation_id])
+  @@index([user_id])
 }
 
 // Define enum for booking status
