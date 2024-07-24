@@ -22,11 +22,18 @@ type Accomodation {
   type: String!
 }
 
+type FavouriteModel {
+  id: Float!
+}
+
 type Mutation {
   ownerCreateAccomodation(args: OwnerCreateAccomodationInput!): Accomodation!
   ownerLogin(args: OwnerLoginInput!): OwnerAccessToken!
   ownerRegister(args: OwnerRegisterInput!): OwnerAccessToken!
   ownerUpdateAccommodation(description: String, id: Float!, location: String, name: String, price: Float, status: String, type: String): AccommodationModel!
+  userFavouriteAdd(args: UserFavouriteInput!): FavouriteModel!
+  userFavouriteCheck(accomodation_id: Float!): Boolean!
+  userFavouriteDelete(args: UserFavouriteInput!): Boolean!
   userLogin(args: UserLoginInput!): UserAccessToken!
   userRegister(args: UserRegisterInput!): UserAccessToken!
 }
@@ -101,12 +108,17 @@ type Query {
     status: String
     type: String
   ): PaginateAccommodationModel!
+  userFavouriteList: FavouriteModel!
   userPersonalProfile: UserModel!
 }
 
 type UserAccessToken {
   access_token: String!
   user: UserModel!
+}
+
+input UserFavouriteInput {
+  accommodation_id: Float!
 }
 
 input UserLoginInput {
