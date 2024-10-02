@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { UserAccommodationModule } from './accommodation/accommodation.module';
 import { UserAuthModule } from './auth/auth.module';
 import { UserFavouriteModule } from './favourite/favourite.module';
 import { PersonalModule } from './personal/personal.module';
+import { UserPropertyModule } from './property/property.module';
 
 @Module({
   imports: [
     UserAuthModule,
-    UserAccommodationModule,
+    UserPropertyModule,
     PersonalModule,
     UserFavouriteModule,
   ],

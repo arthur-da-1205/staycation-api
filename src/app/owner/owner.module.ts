@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { OwnerAccomodationModule } from './accommodation/accommodation.module';
 import { OwnerAuthModule } from './auth/auth.module';
+import { OwnerPropertyModule } from './property/property.module';
 
 @Module({
-  imports: [OwnerAuthModule, OwnerAccomodationModule],
+  imports: [OwnerAuthModule, OwnerPropertyModule],
 })
 export class OwnerModule {}

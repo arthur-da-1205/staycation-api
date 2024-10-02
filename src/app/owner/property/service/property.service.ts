@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
-import { OwnerCreateAccomodationInput } from '../dto/accommodation.dto';
+import { OwnerCreatePropertyInput } from '../dto/property.dto';
 
 @Injectable()
-export class OwnerAccomodationService {
+export class OwnerPropertyService {
   constructor(private prismaService: PrismaService) {}
 
   private async generateId(): Promise<number> {
-    const last = await this.prismaService.accommodation.findFirst({
+    const last = await this.prismaService.property.findFirst({
       orderBy: { id: 'desc' },
     });
 
@@ -22,10 +22,10 @@ export class OwnerAccomodationService {
     }
   }
 
-  async create(dto: OwnerCreateAccomodationInput) {
+  async create(dto: OwnerCreatePropertyInput) {
     const customId = await this.generateId();
 
-    const accomodation = await this.prismaService.accommodation.create({
+    const accomodation = await this.prismaService.property.create({
       data: {
         id: customId,
         name: dto.name,

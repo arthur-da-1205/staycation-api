@@ -1,16 +1,16 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { AccommodationStatus } from '@prisma/client';
+import { PropertyStatus } from '@prisma/client';
 import { IsOptional, IsString } from 'class-validator';
 
 @ArgsType()
-export class UserAccommodationArgs {
+export class UserPropertyArgs {
   @Field({ nullable: true })
   @IsOptional()
   type?: string;
 
   @Field({
     nullable: true,
-    description: Object.values(AccommodationStatus).toString(),
+    description: Object.values(PropertyStatus).toString(),
   })
   @IsOptional()
   status?: string;

@@ -22,24 +22,24 @@ export class UserFavouriteResolver {
     @Args('args') createFavouriteInput: UserFavouriteInput,
     @ME() me: User,
   ) {
-    const accommodation = await this.prisma.accommodation.findFirst({
+    const property = await this.prisma.property.findFirst({
       where: {
-        id: createFavouriteInput.accommodation_id,
+        id: createFavouriteInput.property_id,
         status: 'ACTIVE',
       },
     });
 
     const fav = await this.prisma.favourite.upsert({
       where: {
-        user_id_accommodation_id: {
+        user_id_property_id: {
           user_id: me.id,
-          accommodation_id: accommodation.id,
+          property_id: property.id,
         },
       },
       update: {},
       create: {
         user_id: me.id,
-        accommodation_id: accommodation.id,
+        property_id: property.id,
         // Add other fields to be created if necessary
       },
     });
@@ -54,9 +54,9 @@ export class UserFavouriteResolver {
   ) {
     await this.prisma.favourite.delete({
       where: {
-        user_id_accommodation_id: {
+        user_id_property_id: {
           user_id: me.id,
-          accommodation_id: deleteFavouriteInput.accommodation_id,
+          property_id: deleteFavouriteInput.property_id,
         },
       },
     });
@@ -66,14 +66,14 @@ export class UserFavouriteResolver {
 
   @Mutation(() => Boolean)
   async userFavouriteCheck(
-    @Args('accomodation_id') accommodation_id: number,
+    @Args('accomodation_id') property_id: number,
     @ME() me: User,
   ) {
     const fav = await this.prisma.favourite.findUnique({
       where: {
-        user_id_accommodation_id: {
+        user_id_property_id: {
           user_id: me.id,
-          accommodation_id: accommodation_id,
+          property_id: property_id,
         },
       },
     });

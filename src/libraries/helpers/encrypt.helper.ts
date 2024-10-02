@@ -10,6 +10,7 @@ const secretKey = config.get('ENCRYPT_KEY');
 //TODO: should use secretKey var, but don't know how it can't. Secret Key should be written in .env
 const simpleCrypto = new SimpleCrypto(
   '9gRtNQyXFi46e7GLpEUGzT3sDhDC3nkaUjgv4ErU5DSMT5hGKESlBwV5XSShwlN6',
+  // secretKey,
 );
 
 export const encrypt = (payload: any) => {
