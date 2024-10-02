@@ -24,43 +24,43 @@ model User {
 
 // Define the Owner model for accommodation owners
 model Owner {
-  id             Int             @id // Primary key with autoincrement
-  email          String          @unique // Unique constraint for email
-  name           String? // Optional name field
-  password       String
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @default(now()) @updatedAt @map("updated_at")
-  accommodations Accommodation[] // One-to-many relationship: One owner can have multiple accommodations
+  id         Int        @id // Primary key with autoincrement
+  email      String     @unique // Unique constraint for email
+  name       String? // Optional name field
+  password   String
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")
+  properties Property[] // One-to-many relationship: One owner can have multiple accommodations
 }
 
 // Define the Accommodation model
-model Accommodation {
-  id          Int                 @id @default(autoincrement()) // Primary key with autoincrement
+model Property {
+  id          Int            @id @default(autoincrement()) // Primary key with autoincrement
   name        String // Name of the accommodation
-  type        AccommodationType // Type of accommodation (e.g., Hotel, Villa, Guest House)
+  type        PropertyType // Type of accommodation (e.g., Hotel, Villa, Guest House)
   description String // Description of the accommodation
   location    String // Location of the accommodation
   price       Float // Price of the accommodation per night
-  status      AccommodationStatus // Status of the accommodation
+  status      PropertyStatus // Status of the accommodation
   owner_id    Int // Foreign key to Owner
-  owner       Owner               @relation(fields: [owner_id], references: [id]) // Many-to-one relationship: Many accommodations can be associated with one owner
+  owner       Owner          @relation(fields: [owner_id], references: [id]) // Many-to-one relationship: Many accommodations can be associated with one owner
   bookings    Booking[] // One-to-many relationship: One accommodation can have multiple bookings
-  createdAt   DateTime            @default(now()) @map("created_at")
-  updatedAt   DateTime            @default(now()) @updatedAt @map("updated_at")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @default(now()) @updatedAt @map("updated_at")
   Favourite   Favourite[]
 }
 
 // Define the Booking model
 model Booking {
-  id               Int           @id @default(autoincrement()) // Primary key with autoincrement
-  accommodation_id Int // Foreign key to Accommodation
-  user_id          Int // Foreign key to User
-  status           BookingStatus // Status of the booking
-  user             User          @relation(fields: [user_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one user
-  accommodation    Accommodation @relation(fields: [accommodation_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one accommodation
-  createdAt        DateTime      @default(now()) @map("created_at")
-  updatedAt        DateTime      @default(now()) @updatedAt @map("updated_at")
-  transactions     Transaction[] // One-to-many relationship: One booking can have multiple transactions
+  id           Int           @id @default(autoincrement()) // Primary key with autoincrement
+  property_id  Int // Foreign key to Accommodation
+  user_id      Int // Foreign key to User
+  status       BookingStatus // Status of the booking
+  user         User          @relation(fields: [user_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one user
+  property     Property      @relation(fields: [property_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one accommodation
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  transactions Transaction[] // One-to-many relationship: One booking can have multiple transactions
 }
 
 // Define the Transaction model
@@ -78,14 +78,14 @@ model Transaction {
 }
 
 model Favourite {
-  id               Int           @id @default(autoincrement())
-  accommodation_id Int
-  user_id          Int
-  user             User          @relation(fields: [user_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one user
-  accommodation    Accommodation @relation(fields: [accommodation_id], references: [id])
+  id          Int      @id @default(autoincrement())
+  property_id Int
+  user_id     Int
+  user        User     @relation(fields: [user_id], references: [id]) // Many-to-one relationship: Many bookings can be associated with one user
+  property    Property @relation(fields: [property_id], references: [id])
 
-  @@unique([user_id, accommodation_id]) // Composite unique constraint
-  @@index([accommodation_id])
+  @@unique([user_id, property_id]) // Composite unique constraint
+  @@index([property_id])
   @@index([user_id])
 }
 
@@ -98,14 +98,14 @@ enum BookingStatus {
 }
 
 // Define enum for accommodation type
-enum AccommodationType {
+enum PropertyType {
   VILLA
   HOTEL
   GUEST_HOUSE
 }
 
 // Define enum for accommodation status
-enum AccommodationStatus {
+enum PropertyStatus {
   ACTIVE
   PERMANENT_CLOSED
   TEMPORARY_CLOSED

@@ -1,5 +1,5 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
-import { AccommodationStatus, AccommodationType } from '@prisma/client';
+import { PropertyStatus, PropertyType } from '@prisma/client';
 import {
   IsEnum,
   IsNotEmpty,
@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 
 @InputType()
-export class OwnerCreateAccomodationInput {
+export class OwnerCreatePropertyInput {
   @Field()
   @IsNotEmpty()
   @IsString()
@@ -17,13 +17,13 @@ export class OwnerCreateAccomodationInput {
 
   @Field()
   @IsNotEmpty()
-  @IsEnum(AccommodationType)
-  type: AccommodationType;
+  @IsEnum(PropertyType)
+  type: PropertyType;
 
   @Field()
   @IsNotEmpty()
-  @IsEnum(AccommodationStatus)
-  status: AccommodationStatus;
+  @IsEnum(PropertyStatus)
+  status: PropertyStatus;
 
   @Field()
   @IsString()
@@ -40,24 +40,23 @@ export class OwnerCreateAccomodationInput {
   @IsNotEmpty()
   price: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsNumber()
-  @IsNotEmpty()
   owner_id: number;
 }
 
 @ArgsType()
-export class OwnerAccommodationArgs {
+export class OwnerPropertyArgs {
   @Field({
     nullable: true,
-    description: Object.values(AccommodationType).toString(),
+    description: Object.values(PropertyType).toString(),
   })
   @IsOptional()
   type?: string;
 
   @Field({
     nullable: true,
-    description: Object.values(AccommodationStatus).toString(),
+    description: Object.values(PropertyStatus).toString(),
   })
   @IsOptional()
   status?: string;
@@ -69,7 +68,7 @@ export class OwnerAccommodationArgs {
 }
 
 @ArgsType()
-export class OwnerUpdateAccommodationInput {
+export class OwnerUpdatePropertyInput {
   @Field()
   id: number;
 
@@ -80,13 +79,13 @@ export class OwnerUpdateAccommodationInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsEnum(AccommodationType)
-  type?: AccommodationType;
+  @IsEnum(PropertyType)
+  type?: PropertyType;
 
   @Field({ nullable: true })
   @IsOptional()
-  @IsEnum(AccommodationStatus)
-  status?: AccommodationStatus;
+  @IsEnum(PropertyStatus)
+  status?: PropertyStatus;
 
   @Field({ nullable: true })
   @IsOptional()

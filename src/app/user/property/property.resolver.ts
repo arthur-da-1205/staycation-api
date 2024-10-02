@@ -1,25 +1,22 @@
 import { PaginationArgs } from '@common/args/paginate.args';
 import { GenericException } from '@common/exceptions/generic.exception';
 import { GqlAuthGuard } from '@common/gurads/gql.guard';
-import {
-  AccommodationModel,
-  PaginateAccommodationModel,
-} from '@models/accomodation.model';
+import { PaginatePropertyModel, PropertyModel } from '@models/property.model';
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { PrismaService } from '@prisma/prisma.service';
-import { UserAccommodationArgs } from './dto/accommodation.dto';
+import { UserPropertyArgs } from './dto/property.dto';
 
 @Resolver()
 @UseGuards(GqlAuthGuard)
-export class UserAccommodationResolver {
+export class UserPropertyResolver {
   constructor(private prismaService: PrismaService) {}
 
-  @Query(() => PaginateAccommodationModel)
-  async userAccommodationList(
+  @Query(() => PaginatePropertyModel)
+  async userPropertyList(
     @Args() paginate: PaginationArgs,
-    @Args({ nullable: true }) filter: UserAccommodationArgs,
-  ): Promise<PaginateAccommodationModel> {
+    @Args({ nullable: true }) filter: UserPropertyArgs,
+  ): Promise<PaginatePropertyModel> {
     if (paginate.per_page > 100) {
       throw new GenericException('Max. Limit 100');
     }
@@ -36,13 +33,13 @@ export class UserAccommodationResolver {
     };
 
     const [items, total_count] = await this.prismaService.$transaction([
-      this.prismaService.accommodation.findMany({
+      this.prismaService.property.findMany({
         where: where as any,
         take: paginate.per_page,
         skip: (paginate.page - 1) * paginate.per_page,
         orderBy: { updatedAt: 'desc' },
       }),
-      this.prismaService.accommodation.count({ where: where as any }),
+      this.prismaService.property.count({ where: where as any }),
     ]);
 
     const page_count = Math.ceil(total_count / paginate.per_page);
@@ -58,12 +55,12 @@ export class UserAccommodationResolver {
     };
   }
 
-  @Query(() => AccommodationModel)
-  async userAccommodationDetail(@Args('id') id: number) {
-    const accommodation = await this.prismaService.accommodation.findUnique({
+  @Query(() => PropertyModel)
+  async userPropertyDetail(@Args('id') id: number) {
+    const property = await this.prismaService.property.findUnique({
       where: { id: id },
     });
 
-    return accommodation;
+    return property;
   }
 }

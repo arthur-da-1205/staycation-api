@@ -5,5 +5,5 @@ import { IsNotEmpty } from 'class-validator';
 export class UserFavouriteInput {
   @Field()
   @IsNotEmpty()
-  accommodation_id: number;
+  property_id: number;
 }

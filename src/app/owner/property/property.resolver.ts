@@ -1,46 +1,48 @@
 import { PaginationArgs } from '@common/args/paginate.args';
+import { ME } from '@common/decorators/get-me.decorator';
 import { GenericException } from '@common/exceptions/generic.exception';
 import { GqlAuthOwnerGuard } from '@common/gurads/gql.guard';
-import {
-  AccommodationModel,
-  PaginateAccommodationModel,
-} from '@models/accomodation.model';
+import { PaginatePropertyModel, PropertyModel } from '@models/property.model';
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Owner } from '@prisma/client';
 import { PrismaService } from '@prisma/prisma.service';
 import {
-  OwnerAccommodationArgs,
-  OwnerCreateAccomodationInput,
-  OwnerUpdateAccommodationInput,
-} from './dto/accommodation.dto';
-import { Accomodation } from './entities/accommodation.entity';
-import { OwnerAccomodationService } from './service/accommodation.service';
+  OwnerCreatePropertyInput,
+  OwnerPropertyArgs,
+  OwnerUpdatePropertyInput,
+} from './dto/property.dto';
+import { Property } from './entities/property.entity';
+import { OwnerPropertyService } from './service/property.service';
 
 @Resolver()
 @UseGuards(GqlAuthOwnerGuard)
-export class OwnerAccomodationResolver {
+export class OwnerPropertynResolver {
   constructor(
-    private readonly accomodationService: OwnerAccomodationService,
+    private readonly propertyService: OwnerPropertyService,
     private prismaService: PrismaService,
   ) {}
 
-  @Mutation(() => Accomodation)
-  async ownerCreateAccomodation(
+  @Mutation(() => Property)
+  async ownerCreateProperty(
     @Args('args')
-    createAccomodationInput: OwnerCreateAccomodationInput,
+    createPropertyInput: OwnerCreatePropertyInput,
+    @ME() me: Owner,
   ) {
-    const accomodation = await this.accomodationService.create(
-      createAccomodationInput,
-    );
+    const property = await this.propertyService.create({
+      ...createPropertyInput,
+      owner_id: me.id,
+    });
 
-    return accomodation;
+    return property;
   }
 
-  @Query(() => PaginateAccommodationModel)
-  async ownerAccommodationList(
+  @Query(() => PaginatePropertyModel)
+  async ownerPropertyList(
     @Args() paginate: PaginationArgs,
-    @Args({ nullable: true }) filter: OwnerAccommodationArgs,
-  ): Promise<PaginateAccommodationModel> {
+    @Args({ nullable: true }) filter: OwnerPropertyArgs,
+    @ME() me: Owner,
+  ): Promise<PaginatePropertyModel> {
     if (paginate.per_page > 100) {
       throw new GenericException('Max. Limit 100');
     }
@@ -54,16 +56,17 @@ export class OwnerAccomodationResolver {
           { location: { contains: filter.search, mode: 'insensitive' } },
         ],
       }),
+      owner_id: me.id,
     };
 
     const [items, total_count] = await this.prismaService.$transaction([
-      this.prismaService.accommodation.findMany({
+      this.prismaService.property.findMany({
         where: where as any,
         take: paginate.per_page,
         skip: (paginate.page - 1) * paginate.per_page,
         orderBy: { updatedAt: 'desc' },
       }),
-      this.prismaService.accommodation.count({ where: where as any }),
+      this.prismaService.property.count({ where: where as any }),
     ]);
 
     const page_count = Math.ceil(total_count / paginate.per_page);
@@ -79,29 +82,29 @@ export class OwnerAccomodationResolver {
     };
   }
 
-  @Query(() => AccommodationModel)
-  async ownerAccommodationDetail(@Args('id') id: number) {
-    const accommodation = await this.prismaService.accommodation.findUnique({
+  @Query(() => PropertyModel)
+  async ownerPropertyDetail(@Args('id') id: number) {
+    const property = await this.prismaService.property.findUnique({
       where: { id: id },
     });
 
-    return accommodation;
+    return property;
   }
 
-  @Mutation(() => AccommodationModel)
-  async ownerUpdateAccommodation(
+  @Mutation(() => PropertyModel)
+  async ownerUpdateProperty(
     @Args('id') id: number,
-    @Args({ nullable: true }) data: OwnerUpdateAccommodationInput,
-  ): Promise<AccommodationModel> {
-    const accommodation = await this.prismaService.accommodation.findUnique({
+    @Args({ nullable: true }) data: OwnerUpdatePropertyInput,
+  ): Promise<PropertyModel> {
+    const property = await this.prismaService.property.findUnique({
       where: { id: id },
     });
 
-    if (!accommodation) {
-      throw new NotFoundException(`Accommodation with ID ${id} not found`);
+    if (!property) {
+      throw new NotFoundException(`Property with ID ${id} not found`);
     }
 
-    const result = this.prismaService.accommodation.update({
+    const result = this.prismaService.property.update({
       where: { id },
       data,
     });

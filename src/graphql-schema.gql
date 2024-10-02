@@ -2,35 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type AccommodationModel {
-  description: String!
-  id: Float!
-  location: String!
-  name: String!
-  price: Float!
-  status: String!
-  type: String!
-}
-
-type Accomodation {
-  description: String!
-  id: Int!
-  location: String!
-  name: String!
-  price: Int!
-  status: String!
-  type: String!
-}
-
 type FavouriteModel {
   id: Float!
 }
 
 type Mutation {
-  ownerCreateAccomodation(args: OwnerCreateAccomodationInput!): Accomodation!
+  ownerCreateProperty(args: OwnerCreatePropertyInput!): Property!
   ownerLogin(args: OwnerLoginInput!): OwnerAccessToken!
   ownerRegister(args: OwnerRegisterInput!): OwnerAccessToken!
-  ownerUpdateAccommodation(description: String, id: Float!, location: String, name: String, price: Float, status: String, type: String): AccommodationModel!
+  ownerUpdateProperty(description: String, id: Float!, location: String, name: String, price: Float, status: String, type: String): PropertyModel!
   userFavouriteAdd(args: UserFavouriteInput!): FavouriteModel!
   userFavouriteCheck(accomodation_id: Float!): Boolean!
   userFavouriteDelete(args: UserFavouriteInput!): Boolean!
@@ -43,11 +23,11 @@ type OwnerAccessToken {
   user: OwnerModel!
 }
 
-input OwnerCreateAccomodationInput {
+input OwnerCreatePropertyInput {
   description: String!
   location: String!
   name: String!
-  owner_id: Float!
+  owner_id: Float
   price: Float!
   status: String!
   type: String!
@@ -77,14 +57,35 @@ type PageInfo {
   total_count: Int
 }
 
-type PaginateAccommodationModel {
-  items: [AccommodationModel!]
+type PaginatePropertyModel {
+  items: [PropertyModel!]
   meta: PageInfo
 }
 
+type Property {
+  description: String!
+  id: Int!
+  location: String!
+  name: String!
+  price: Int!
+  status: String!
+  type: String!
+}
+
+type PropertyModel {
+  description: String
+  id: Float!
+  location: String!
+  name: String!
+  owner_id: Float!
+  price: Float!
+  status: String!
+  type: String!
+}
+
 type Query {
-  ownerAccommodationDetail(id: Float!): AccommodationModel!
-  ownerAccommodationList(
+  ownerPropertyDetail(id: Float!): PropertyModel!
+  ownerPropertyList(
     page: Int = 1
     per_page: Int = 10
     search: String
@@ -95,10 +96,12 @@ type Query {
 
     """VILLA,HOTEL,GUEST_HOUSE"""
     type: String
-  ): PaginateAccommodationModel!
+  ): PaginatePropertyModel!
   sayHello: String!
-  userAccommodationDetail(id: Float!): AccommodationModel!
-  userAccommodationList(
+  userFavouriteList: FavouriteModel!
+  userPersonalProfile: UserModel!
+  userPropertyDetail(id: Float!): PropertyModel!
+  userPropertyList(
     page: Int = 1
     per_page: Int = 10
     search: String
@@ -107,9 +110,7 @@ type Query {
     """ACTIVE,PERMANENT_CLOSED,TEMPORARY_CLOSED"""
     status: String
     type: String
-  ): PaginateAccommodationModel!
-  userFavouriteList: FavouriteModel!
-  userPersonalProfile: UserModel!
+  ): PaginatePropertyModel!
 }
 
 type UserAccessToken {
@@ -118,7 +119,7 @@ type UserAccessToken {
 }
 
 input UserFavouriteInput {
-  accommodation_id: Float!
+  property_id: Float!
 }
 
 input UserLoginInput {
